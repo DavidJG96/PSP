@@ -12,7 +12,7 @@ import java.util.concurrent.Semaphore;
      class createThreadPool {
 
         //array de threads
-        private final threadArray[] thread;
+        private final ThreadOne[] thread;
 
         // cola
         private final Queue<Runnable> queue;
@@ -21,13 +21,13 @@ import java.util.concurrent.Semaphore;
     public createThreadPool(int poolSize) {
 
             queue = new LinkedBlockingQueue<Runnable>();
-            thread = new threadArray[poolSize];
+            thread = new ThreadOne[poolSize];
 
             for (int i = 0; i < 2; i++) {
 
                 this.semaphore = new Semaphore(1);
                 this.threadName = i;
-                thread[i] = new threadArray();
+                thread[i] = new ThreadOne();
                 thread[i].start();
 
             }
@@ -40,7 +40,7 @@ import java.util.concurrent.Semaphore;
             }
         }
 
-        private class threadArray extends Thread {
+        private class ThreadOne extends Thread {
             public void run() {
                 Runnable task;
                 //empezamos con los threads dormidos com el semaforo a 0
@@ -63,6 +63,7 @@ import java.util.concurrent.Semaphore;
                             }
                         }
                         //avanzamos en la cola
+
                         task = queue.poll();
 
                     }
@@ -72,9 +73,11 @@ import java.util.concurrent.Semaphore;
                         task.run();
                         //comprobamos la cola y vemos si hay mas tareas depues de ejecutar la primera
                         if(!queue.isEmpty()){
+                            //liberamos 1 thread mas, hasta ahora solo se habia despertado el thread 0, en la siguiente iteracion de bucle se habra despertado en thread 1
+                            //en la primera iteracio el thread 0 completa la tarea 0 y en la siguiente iteracion el thread 0 completa la tarea 1 y el thread 1 completaria la tarea 2
                             semaphore.release(1);
                         }else{
-                            //comprobamos si quedan tareas pendientes y si no quedan salimos del bucle volvienso a dormir los threads
+                            //comprobamos si quedan tareas pendientes y si no quedan salimos del bucle volviendo a dormir los threads con semaphore acquire
                             break;
                         }
                         } catch (RuntimeException e) {
