@@ -3,12 +3,13 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 
+// Esto no sé qué pinta aquí
 /**
  * Hello world!
  *
  */
 
-
+     // Nombre my malo para una clase, y por favor, puedes hacer esta clase en otro archivo, aquí es un poco chapuza
      class createThreadPool {
 
         //array de threads
@@ -16,17 +17,23 @@ import java.util.concurrent.Semaphore;
 
         // cola
         private final Queue<Runnable> queue;
+
+          // El semaforo no va aquí
             Semaphore semaphore;
             int threadName;
+
+          // Mal indentado
     public createThreadPool(int poolSize) {
 
             queue = new LinkedBlockingQueue<Runnable>();
             thread = new ThreadOne[poolSize];
 
+               // No sé qué pinta este dos aquí
             for (int i = 0; i < 2; i++) {
-
+                // No entoendo que hacen estas dos variables, ..., y el semáforo lo inicializas a 1????
                 this.semaphore = new Semaphore(1);
                 this.threadName = i;
+                 
                 thread[i] = new ThreadOne();
                 thread[i].start();
 
@@ -57,6 +64,7 @@ import java.util.concurrent.Semaphore;
                         if (queue.isEmpty()) {
                             try {
                                 //esperamos a la cola
+                                 // Ya quedamos en que esto no iba aquí
                                 queue.wait();
                             } catch (InterruptedException e) {
                                 System.out.println("SE ha parado por un error en la cola" + e.getMessage());
