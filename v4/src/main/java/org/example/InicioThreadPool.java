@@ -3,26 +3,28 @@ import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 
-// Esto no sé qué pinta aquí
+// JAVI: Esto no sé qué pinta aquí ...
 /**
  * Hello world!
  *
  */
 
-     // Nombre my malo para una clase, y por favor, puedes hacer esta clase en otro archivo, aquí es un poco chapuza
+     // JAVI: Nombre my malo para una clase, y por favor, puedes hacer esta clase en otro archivo, aquí es un poco chapuza
      class createThreadPool {
 
         //array de threads
+        // JAVI: Por qué usas un array en vez de una lista????
         private final ThreadOne[] thread;
 
         // cola
         private final Queue<Runnable> queue;
 
-          // El semaforo no va aquí
+          // JAVI: El semaforo no va aquí
             Semaphore semaphore;
+          // JAVI: No tengo ni idea de para qué sirve esta variable
             int threadName;
 
-          // Mal indentado
+          // JAVI: Mal indentado
     public createThreadPool(int poolSize) {
 
             queue = new LinkedBlockingQueue<Runnable>();
@@ -41,17 +43,20 @@ import java.util.concurrent.Semaphore;
         }
 
         public void execute(Runnable task) {
+             // JAVI: No quedamos en que esto no era así? sino que se tenía que usar el semáforo para despertar a los hilos??
             synchronized (queue) {
                 queue.add(task);
                 queue.notify();
             }
         }
 
+          // JAVI: Mal nombre para la clase
         private class ThreadOne extends Thread {
             public void run() {
                 Runnable task;
                 //empezamos con los threads dormidos com el semaforo a 0
 
+                 // Esto que hace aquí?!?!?!?!
                 try {
                     semaphore.acquire();
                 } catch (InterruptedException e) {
@@ -83,9 +88,11 @@ import java.util.concurrent.Semaphore;
                         if(!queue.isEmpty()){
                             //liberamos 1 thread mas, hasta ahora solo se habia despertado el thread 0, en la siguiente iteracion de bucle se habra despertado en thread 1
                             //en la primera iteracio el thread 0 completa la tarea 0 y en la siguiente iteracion el thread 0 completa la tarea 1 y el thread 1 completaria la tarea 2
+                             // No entiendo que hace esto aquí?
                             semaphore.release(1);
                         }else{
                             //comprobamos si quedan tareas pendientes y si no quedan salimos del bucle volviendo a dormir los threads con semaphore acquire
+                             // JAVI: Esto no hace lo que dices que hace
                             break;
                         }
                         } catch (RuntimeException e) {
@@ -102,6 +109,7 @@ import java.util.concurrent.Semaphore;
         public void shutdownThreads() {
 
 
+             // JAVI: Ya comentamos en su momento que esto no era así
             for (int i = 0; i < 2; i++) {
                 thread[i] = null;
             }
@@ -112,6 +120,7 @@ import java.util.concurrent.Semaphore;
 
     }
 
+// JAVI: Por favor, ponme la clase del thread pool en otro fichero
     class Task implements Runnable {
         private final String name;
 
